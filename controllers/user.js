@@ -15,23 +15,28 @@ exports.getLoginUserInfo = async (req, res, next) => {
     }
 }
 
-exports.createNewUser = (req, res, next) => {
+exports.createNewUser = async (req, res, next) => {
     const errors = validationResult(req);
+
     if (!errors.isEmpty()) {
         return res.status(422).json({errors: errors.mapped(), isSuccess: false});
     }
 
-    const recaptchaResponse = matchedData(req).recaptchaResponse;
-    const secretKey = '6Lfp0zEUAAAAAB-TSq-EkOlscUZC2co4nUtKf44S';
+    // const recaptchaResponse = matchedData(req).recaptchaResponse;
+    // const secretKey = '6Lfp0zEUAAAAAB-TSq-EkOlscUZC2co4nUtKf44S';
       //Verify URL
-    const verifyUrl = `https://google.com/recaptcha/api/siteverify?secret=
-    ${secretKey}&response=${recaptchaResponse}&remoteip=${req.connection.remoteAddress}`;
+    // const verifyUrl = 'https://google.com/recaptcha/api/siteverify';
     // Make request to verify URL
-    request(verifyUrl, async (err, response, body) => {
-        body = JSON.parse(body);
-        if(body.success === undefined || !body.success) {
-            res.json({isSuccess: false, message: '请勾选reCAPTCHA验证'});
-        } else {
+    // request.post(verifyUrl, {
+    //     secret: secretKey,
+    //     response: recaptchaResponse,
+    //     remoteip: req.connection.remoteAddress,
+    // }, async (err, response, body) => {
+    //     console.log(verifyUrl, err, response);
+        // body = JSON.parse(body);
+        // if(body.success === undefined || !body.success) {
+        //     res.json({isSuccess: false, message: '请勾选reCAPTCHA验证'});
+        // } else {
             const newUser = matchedData(req);
 
             if(newUser.gender === '男') {
@@ -47,8 +52,8 @@ exports.createNewUser = (req, res, next) => {
             } catch(err) {
                 res.json({isSuccess: false});
             }
-        }
-    });
+        // }
+    // });
 }
 
 exports.loginStrategy = async function(username, password, done) {
@@ -83,7 +88,7 @@ exports.login = (req, res, next) => {
                     const onlineUser = new OnlineUser({user: user._id});
                     onlineUser.online();
                     const token = user.generateJwt();
-                    res.cookie('awesome', token, {expires: new Date(Date.now() + 800000)});
+                    res.cookie('awesome', token, {expires: new Date(Date.now() + 1000000000)});
                     res.status(200).json({token, isSuccess: true});
                 }
             } catch(err) {

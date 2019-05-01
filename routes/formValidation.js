@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const db = require('../models/db');
-const User = require('../models/userSchema');
+const User = require('../services').User;
 
 router.post('/unique-name', async (req, res, next) => {
     let resultJson = {};

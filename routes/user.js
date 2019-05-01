@@ -13,9 +13,9 @@ router.post('/', [
     check('username').exists().withMessage('Username is required'),
     check('gender').exists().withMessage('Gender is required'),
     check('email').exists().withMessage('Email is required').isEmail().withMessage('Email is not valid'),
-    check('mobile').custom((value) => /^0?(13\d|14[5,7]|15[0-3,5-9]|17[0,6-8]|18\d)\d{8}$/.test(value)).withMessage('mobile is not valid'),
+    check('mobile').custom((value) => /^1[34578]\d{9}$/.test(value)).withMessage('mobile is not valid'),
     check('password').exists().withMessage('Password is required').custom((value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(value)).withMessage('Password is not valid'),
-    check('confirmPassword').exists().withMessage('confirmPassword is required').custom((value) => value === req.body.password).withMessage('Passwords do not match'),
+    check('confirmPassword').exists().withMessage('confirmPassword is required').custom((value, { req }) => value === req.body.password).withMessage('Passwords do not match'),
     check('recaptchaResponse').exists().withMessage('recaptcha is required'),
 ], user.createNewUser);
 

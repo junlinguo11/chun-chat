@@ -96,6 +96,30 @@ module.exports = function(io){
             });
         });
 
+        socket.on('videoOffer', async (request) => {
+            const sender = await User.getUserInfoById(request.sender);
+
+            io.to(request.receiver).emit('videoOffer', {
+                sender,
+                sdp: request.sdp,
+            });
+        });
+
+        socket.on('videoAnswer', async (answer) => {
+            const sender = await User.getUserInfoById(answer.sender);
+
+            io.to(answer.receiver).emit('videoAnswer', {
+                sender,
+                sdp: answer.sdp,
+            });
+        });
+
+        socket.on('iceCandidate', (request) => {
+            io.to(request.receiver).emit('iceCandidate', {
+                candidate: request.candidate,
+            });
+        });
+
         socket.on('disconnect', function(){
             if ( onlineList.indexOf(onlineConnection) !== -1) {
                 onlineList.splice(onlineList.indexOf(onlineConnection),1);

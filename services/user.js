@@ -35,6 +35,10 @@ userSchema.statics.getUserById = function(id) {
              .populate('incomingFriendRequests', '_id username gender avatar').exec();
 }
 
+userSchema.statics.getUserInfoById = function(id) {
+  return this.findById(id, '-password').populate('friends', 'username gender email avatar').exec();
+}
+
 userSchema.statics.comparePassword = function(providedPassword, hash) {
   return bcrypt.compare(providedPassword, hash);
 }
