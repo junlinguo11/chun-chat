@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "animate.css": "^3.7.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
     "cache-loader": "^2.0.1",
     "debounce": "^1.2.0",
